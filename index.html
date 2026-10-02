@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#11335c">
+    <meta name="description" content="Resultados de la Quiniela de la Ciudad, claros y sin publicidad.">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css">
+    <title>Quiniela de hoy</title>
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <img class="brand" src="logo-gran-sebastian-v2.png" alt="Quiniela El Gran Sebastian">
+        <p class="eyebrow">RESULTADOS DE QUINIELA</p>
+        <h1 id="title">Resultados de hoy</h1>
+        <p id="date" class="date"></p>
+      </header>
+
+      <nav class="main-nav" aria-label="Secciones principales">
+        <button class="nav-button" type="button" data-view="results-view" data-day="yesterday">AYER</button>
+        <button class="nav-button active" type="button" data-view="results-view" data-day="today">HOY</button>
+        <button class="nav-button" type="button" data-view="games-view">MIS JUGADAS</button>
+      </nav>
+      <section id="results-view" class="view active">
+        <p id="updated" class="updated" aria-live="polite">Buscando resultados…</p><section id="results" class="results" aria-live="polite"></section>
+        <button id="refresh" class="refresh" type="button">ACTUALIZAR AHORA</button><p class="source">Resultados informativos. La fuente es Lotería de la Ciudad.</p>
+      </section>
+      <section id="games-view" class="view">
+        <h2 class="section-title">Mis jugadas</h2><p class="help">Cargá los números que jugaste. La app los compara con los resultados oficiales cuando estén disponibles.</p>
+        <form id="game-form" class="game-form"><label>Fecha <input id="game-date" type="date" required></label><label>Sorteo <select id="game-draw" required><option>La Previa</option><option>La Primera</option><option>Matutina</option><option>Vespertina</option><option>Nocturna</option></select></label><label>Número jugado <input id="game-number" inputmode="numeric" autocomplete="off" pattern="[0-9]{1,4}" maxlength="4" placeholder="Ej.: 1234" required></label><label>Posición jugada (1 a 20) <input id="game-position" type="number" inputmode="numeric" min="1" max="20" placeholder="Ej.: 5" required></label><button class="save" type="submit">GUARDAR JUGADA</button></form>
+        <p id="game-message" class="message" aria-live="polite"></p><div class="history-head"><h3>Historial</h3><button id="clear-games" class="link-button" type="button">Borrar todas</button></div><section id="games" class="games" aria-live="polite"></section>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

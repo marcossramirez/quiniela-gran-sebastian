@@ -1,0 +1,27 @@
+:root { color-scheme: light; font-family: Arial, sans-serif; background: #f4ce66; color: #17140e; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.app { max-width: 680px; min-height: 100vh; margin: 0 auto; padding: 28px 16px 38px; background: linear-gradient(145deg, #f9dc87, #efbf43); }
+header { text-align: center; }.brand { display: block; width: min(100%, 310px); height: auto; margin: 0 auto 8px; }
+.eyebrow { margin: 0; color: #4f3b0b; font-size: .85rem; font-weight: 900; letter-spacing: .13em; }
+h1, .section-title { font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; letter-spacing: .03em; text-transform: uppercase; }
+h1 { margin: 8px 0 4px; font-size: clamp(2.4rem, 9vw, 3.4rem); line-height: 1.05; }
+.date { margin: 0; font-size: 1.25rem; font-weight: 700; }
+.main-nav, .day-switch { display: flex; gap: 12px; margin: 26px 0 14px; }
+.nav-button, .day-button, .refresh, .save { border: 0; border-radius: 12px; cursor: pointer; font: inherit; font-weight: 800; }
+.nav-button { flex: 1; border-radius: 999px; background: #fff6d7; border: 2px solid #17140e; color: #17140e; padding: 13px 7px; font-size: 1rem; }.nav-button.active { background: #17140e; border-color: #17140e; color: #ffd85f; }
+.day-button { flex: 1; background: #d9e3ee; color: #183556; padding: 15px; font-size: 1.15rem; }
+.day-button.active { background: #11335c; color: white; }
+.updated { min-height: 1.4em; text-align: center; color: #405670; font-size: .95rem; }
+.results { display: grid; gap: 15px; }
+.draw { border-radius: 19px; background: linear-gradient(#00000035, #00000035), url('lottery-background.png') center / cover; box-shadow: 0 5px 0 #b88618, 0 8px 15px #452b001f; overflow: hidden; padding: 16px; }
+.draw h2 { margin: 0 0 13px; color: white; font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif; font-size: 1.8rem; letter-spacing: .05em; text-shadow: 0 2px 4px #261700; text-transform: uppercase; }
+.draw .pending { margin: 0; padding: 22px 16px; font-size: 1.18rem; font-weight: 700; }
+.result-box { border-radius: 14px; background: #f2bb28eF; padding: 11px; box-shadow: inset 0 0 0 2px #fff2bd88; }.numbers { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin: 0; padding: 0; list-style: none; }
+.numbers li { display: flex; align-items: center; gap: 9px; min-width: 0; border-radius: 999px; background: #fffdf7; padding: 5px 10px 5px 5px; font-size: 1.18rem; font-weight: 900; }
+.position { display: inline-grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; border-radius: 50%; background: #17140e; color: #fff; font-size: .78rem; }.number { letter-spacing: .06em; }
+.draw .pending { margin: 0; border-radius: 14px; background: #fff8e8eB; padding: 16px; color: #211a0b; font-weight: 800; }
+.refresh { display: block; width: 100%; margin-top: 24px; padding: 18px; background: #17140e; color: #ffd85f; font-size: 1.15rem; }.source { margin: 20px 8px 0; text-align: center; color: #523f11; font-size: .84rem; line-height: 1.4; }
+.view { display: none; }.view.active { display: block; }.section-title { margin: 8px 0; font-size: 2rem; }.help { font-size: 1.08rem; line-height: 1.4; }
+.game-form { display: grid; gap: 14px; margin: 18px 0; padding: 18px; border-radius: 17px; background: white; box-shadow: 0 3px 13px #16385a1c; }.game-form label { display: grid; gap: 6px; color: #26455f; font-weight: 800; font-size: 1.05rem; }.game-form input, .game-form select { min-height: 48px; padding: 9px 10px; border: 2px solid #a9bac9; border-radius: 9px; background: white; color: #10243d; font: inherit; font-size: 1.15rem; }.save { margin-top: 4px; min-height: 57px; background: #e2a51b; color: #172b42; font-size: 1.1rem; }.message { min-height: 1.4em; font-weight: 700; text-align: center; }.history-head { display: flex; align-items: center; justify-content: space-between; margin-top: 25px; }.history-head h3 { margin: 0; font-size: 1.45rem; }.link-button { border: 0; background: transparent; color: #9d2525; cursor: pointer; font: inherit; font-weight: 800; text-decoration: underline; }.games { display: grid; gap: 12px; }.game { border-radius: 14px; background: white; padding: 15px; box-shadow: 0 3px 13px #16385a1c; }.game h4 { margin: 0 0 6px; font-size: 1.28rem; }.game p { margin: 5px 0; font-size: 1.05rem; }.status { font-weight: 800; }.status.match { color: #16733d; }.status.miss { color: #9d2525; }.empty { padding: 22px; text-align: center; color: #52677e; font-size: 1.1rem; }
+@media (min-width: 560px) { .numbers { grid-template-columns: repeat(4, 1fr); } }
