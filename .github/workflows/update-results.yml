@@ -2,8 +2,14 @@ name: Actualizar resultados
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    # Cada 15 minutos entre las 10:00 y las 22:59 hora Argentina (UTC-3 = horas 13 a 23 y 0 a 1 en UTC).
+    # Se usan minutos 7, 22, 37 y 52 para evitar el minuto :00, que es el más cargado en GitHub.
+    - cron: '7,22,37,52 0,1,13-23 * * *'
   workflow_dispatch:
+
+concurrency:
+  group: actualizar-resultados
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -11,6 +17,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
