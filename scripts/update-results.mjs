@@ -22,12 +22,12 @@ async function availableDraws() {
   const html = await getHtml(site);
   const $ = cheerio.load(html);
   const draws = [];
-  $('option').each((_, option) => {
-    const label = text($(option).text()).toUpperCase();
-    const id = $(option).attr('value')?.match(/\d{4,}/)?.[0];
+  $('li.custom-option, option').each((_, item) => {
+    const label = text($(item).text()).toUpperCase();
+    const id = ($(item).attr('data-value') || $(item).attr('value'))?.match(/\d{4,}/)?.[0];
     if (id && /SORTEO/.test(label)) draws.push({ id, label });
   });
-  console.log(`HTML: ${html.length} caracteres, ${$('option').length} <option>, ${draws.length} sorteos detectados`);
+  console.log(`HTML: ${html.length} caracteres, ${$('li.custom-option, option').length} opciones, ${draws.length} sorteos detectados`);
   if (!draws.length) {
     console.log('Primeros 600 caracteres recibidos:', text(html).slice(0, 600));
     throw new Error('No se detectó ningún sorteo en la fuente (bloqueo o cambio de formato)');
