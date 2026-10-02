@@ -38,38 +38,25 @@ async function availableDraws() {
 
 async function cityNumbers(id) {
   const raw = await getHtml(`${site}includes/resultados-data.php?sorteo=${id}`);
+  // La respuesta es JavaScript ("window.RESULTADOS_DATA = [...]"), así que se recorta el JSON de adentro.
+  const start = raw.search(/[[{]/);
+  const end = Math.max(raw.lastIndexOf(']'), raw.lastIndexOf('}'));
   let data;
   try {
-    data = JSON.parse(raw);
+    data = JSON.parse(raw.slice(start, end + 1));
   } catch {
-    throw new Error(`La respuesta del sorteo ${id} no es JSON: "${text(raw).slice(0, 200)}"`);
+    throw new Error(`No pude leer los datos del sorteo ${id}: "${text(raw).slice(0, 200)}"`);
   }
-  if (!new RegExp(`\\b${id}\\b`).test(raw)) console.warn(`Aviso: el JSON del sorteo ${id} no menciona ese número de sorteo`);
+  const entries = Array.isArray(data) ? data : [data];
+  const entry = entries.find(item => Number(item?.sorteo) === Number(id));
+  if (!entry) throw new Error(`La respuesta no incluye el sorteo ${id} (trae: ${entries.map(item => item?.sorteo).join(', ') || 'nada'})`);
 
-  // Busca, en cualquier parte del JSON, listas de 20 elementos con {pos, val}, y listas "Tradicional".
-  const candidates = [];
-  const tradicional = [];
-  const walk = (node, path) => {
-    if (Array.isArray(node)) {
-      if (node.length === 20 && node.every(item => item && typeof item === 'object' && 'pos' in item && 'val' in item)) candidates.push({ path, list: node });
-      node.forEach((item, index) => walk(item, `${path}[${index}]`));
-    } else if (node && typeof node === 'object') {
-      for (const [key, value] of Object.entries(node)) {
-        if (key === 'Tradicional' && Array.isArray(value)) tradicional.push(value.map(String));
-        walk(value, path ? `${path}.${key}` : key);
-      }
-    }
-  };
-  walk(data, '');
-
-  let city = candidates.length === 1 ? candidates[0] : candidates.find(item => /ciudad|caba|buenos|bs ?as/i.test(item.path));
-  if (!city) {
-    throw new Error(`No pude identificar los números de Ciudad en el sorteo ${id} (candidatos: ${candidates.map(item => item.path).join(' | ') || 'ninguno'}; claves: ${Object.keys(data).join(', ')})`);
-  }
-  console.log(`Sorteo ${id}: números tomados de "${city.path || '(raíz)'}" (${candidates.length} candidatos)`);
+  const jurisdictions = Object.values(entry.jurisdicciones ?? {});
+  const city = jurisdictions.find(item => /CIUDAD DE BS/i.test(item?.nombre ?? '')) ?? jurisdictions.find(item => /CIUDAD/i.test(item?.nombre ?? ''));
+  if (!city) throw new Error(`No hay jurisdicción CIUDAD en el sorteo ${id} (hay: ${jurisdictions.map(item => item?.nombre).join(', ') || 'ninguna'})`);
 
   const byPosition = new Map();
-  for (const item of city.list) {
+  for (const item of city.numeros ?? []) {
     const position = Number(item.pos);
     const value = String(item.val).trim();
     if (position >= 1 && position <= 20 && /^\d{4}$/.test(value)) byPosition.set(position, value);
@@ -77,8 +64,9 @@ async function cityNumbers(id) {
   if (byPosition.size !== 20) throw new Error(`El sorteo ${id} no contiene los 20 números de Ciudad (encontré ${byPosition.size})`);
   const numbers = Array.from({ length: 20 }, (_, index) => byPosition.get(index + 1));
 
-  // Control cruzado: si el JSON trae la lista "Tradicional", tiene que coincidir con la que usamos.
-  if (tradicional.length && !tradicional.some(list => list.length === 20 && list.every((value, index) => value === numbers[index]))) {
+  // Control cruzado: si el mismo JSON trae la lista "Tradicional", tiene que coincidir.
+  const traditional = city.juegos?.Tradicional;
+  if (Array.isArray(traditional) && traditional.length >= 20 && !numbers.every((value, index) => String(traditional[index]) === value)) {
     throw new Error(`Los números del sorteo ${id} no coinciden con la lista "Tradicional" del mismo JSON`);
   }
   return numbers;
