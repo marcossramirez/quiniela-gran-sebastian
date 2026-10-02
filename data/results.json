@@ -1,5 +1,53 @@
 {
-  "updatedAt": null,
-  "today": {"date":"2026-10-02","draws":[{"name":"La Previa","numbers":[]},{"name":"La Primera","numbers":[]},{"name":"Matutina","numbers":[]},{"name":"Vespertina","numbers":[]},{"name":"Nocturna","numbers":[]}]},
-  "yesterday": {"date":"2026-10-01","draws":[{"name":"La Previa","numbers":[]},{"name":"La Primera","numbers":[]},{"name":"Matutina","numbers":[]},{"name":"Vespertina","numbers":[]},{"name":"Nocturna","numbers":[]}]}
+  "updatedAt": "2026-10-02T18:46:17.839Z",
+  "today": {
+    "date": "2026-10-02",
+    "draws": [
+      {
+        "name": "La Previa",
+        "numbers": []
+      },
+      {
+        "name": "La Primera",
+        "numbers": []
+      },
+      {
+        "name": "Matutina",
+        "numbers": []
+      },
+      {
+        "name": "Vespertina",
+        "numbers": []
+      },
+      {
+        "name": "Nocturna",
+        "numbers": []
+      }
+    ]
+  },
+  "yesterday": {
+    "date": "2026-10-01",
+    "draws": [
+      {
+        "name": "La Previa",
+        "numbers": []
+      },
+      {
+        "name": "La Primera",
+        "numbers": []
+      },
+      {
+        "name": "Matutina",
+        "numbers": []
+      },
+      {
+        "name": "Vespertina",
+        "numbers": []
+      },
+      {
+        "name": "Nocturna",
+        "numbers": []
+      }
+    ]
+  }
 }
