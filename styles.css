@@ -25,3 +25,26 @@ h1 { margin: 8px 0 4px; font-size: clamp(2.4rem, 9vw, 3.4rem); line-height: 1.05
 .view { display: none; }.view.active { display: block; }.section-title { margin: 8px 0; font-size: 2rem; }.help { font-size: 1.08rem; line-height: 1.4; }
 .game-form { display: grid; gap: 14px; margin: 18px 0; padding: 18px; border-radius: 17px; background: white; box-shadow: 0 3px 13px #16385a1c; }.game-form label { display: grid; gap: 6px; color: #26455f; font-weight: 800; font-size: 1.05rem; }.game-form input, .game-form select { min-height: 48px; padding: 9px 10px; border: 2px solid #a9bac9; border-radius: 9px; background: white; color: #10243d; font: inherit; font-size: 1.15rem; }.save { margin-top: 4px; min-height: 57px; background: #e2a51b; color: #172b42; font-size: 1.1rem; }.message { min-height: 1.4em; font-weight: 700; text-align: center; }.history-head { display: flex; align-items: center; justify-content: space-between; margin-top: 25px; }.history-head h3 { margin: 0; font-size: 1.45rem; }.link-button { border: 0; background: transparent; color: #9d2525; cursor: pointer; font: inherit; font-weight: 800; text-decoration: underline; }.games { display: grid; gap: 12px; }.game { border-radius: 14px; background: white; padding: 15px; box-shadow: 0 3px 13px #16385a1c; }.game h4 { margin: 0 0 6px; font-size: 1.28rem; }.game p { margin: 5px 0; font-size: 1.05rem; }.status { font-weight: 800; }.status.match { color: #16733d; }.status.miss { color: #9d2525; }.empty { padding: 22px; text-align: center; color: #52677e; font-size: 1.1rem; }
 @media (min-width: 560px) { .numbers { grid-template-columns: repeat(4, 1fr); } }
+
+/* === Números en columnas verticales: 01-05 | 06-10 | 11-15 | 16-20 === */
+.result-box { container-type: inline-size; }
+
+.numbers {
+  grid-auto-flow: column;
+  grid-template-rows: repeat(5, auto);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(5px, 1.6cqw, 9px);
+}
+
+.numbers li {
+  gap: clamp(3px, 1.2cqw, 9px);
+  padding: 3px clamp(4px, 1.4cqw, 10px) 3px 3px;
+  font-size: clamp(.78rem, 4.4cqw, 1.18rem);
+}
+
+.position {
+  flex: 0 0 auto;
+  width: clamp(20px, 6.2cqw, 34px);
+  height: clamp(20px, 6.2cqw, 34px);
+  font-size: clamp(.55rem, 2.5cqw, .78rem);
+}
