@@ -37,17 +37,24 @@ async function availableDraws() {
 }
 
 async function cityNumbers(id) {
-  const $ = cheerio.load(await getHtml(`${site}extractoOficial.php?sorteo=${id}`));
-  const table = $('#e1').first();
-  const headers = table.find('tr').first().find('th,td').map((_, cell) => text($(cell).text()).toUpperCase()).get();
-  const cityIndex = headers.indexOf('CIUDAD');
-  if (cityIndex < 0) throw new Error(`No se encontró la columna CIUDAD para el sorteo ${id}`);
-  const numbers = table.find('tr').slice(1).map((_, row) => {
-    const cells = $(row).find('td').map((_, cell) => text($(cell).text())).get();
-    return cells[cityIndex] || null;
-  }).get().filter(value => /^\d{4}$/.test(value));
-  if (numbers.length !== 20) throw new Error(`El sorteo ${id} no contiene los 20 números de Ciudad`);
-  return numbers;
+  const $ = cheerio.load(await getHtml(`${site}index.php?sorteo=${id}`));
+  const content = $('#resultadosContent');
+  const header = text(content.find('.sorteo-main-header').text());
+  // Seguridad: la página tiene que ser realmente la del sorteo pedido (si no, se guardarían números de otro sorteo).
+  if (!new RegExp(`\\b${id}\\b`).test(header)) {
+    throw new Error(`La página no corresponde al sorteo ${id} (cabecera: "${header.slice(0, 80)}", bolillas: ${content.find('.bolilla-pill').length}, texto del contenedor: ${text(content.text()).length} caracteres)`);
+  }
+  const panel = content.find('.jur-panel--primary').first();
+  const label = text(panel.find('.jur-label').text()).toUpperCase();
+  if (!label.includes('CIUDAD')) throw new Error(`El panel principal no es CIUDAD (dice "${label}")`);
+  const byPosition = new Map();
+  panel.find('.bolilla-pill').each((_, pill) => {
+    const position = Number(text($(pill).find('.bolilla-pos').text()));
+    const value = text($(pill).find('.bolilla-val').text());
+    if (position >= 1 && position <= 20 && /^\d{4}$/.test(value)) byPosition.set(position, value);
+  });
+  if (byPosition.size !== 20) throw new Error(`El sorteo ${id} no contiene los 20 números de Ciudad (encontré ${byPosition.size})`);
+  return Array.from({ length: 20 }, (_, index) => byPosition.get(index + 1));
 }
 
 function dateFor(offset) {
