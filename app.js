@@ -13,3 +13,11 @@ document.querySelector('#game-date').value = new Intl.DateTimeFormat('en-CA', {t
 document.querySelector('#game-form').addEventListener('submit', e => { e.preventDefault(); const number = document.querySelector('#game-number').value.trim().padStart(4,'0'), position = Number(document.querySelector('#game-position').value); if (!/^\d{4}$/.test(number) || position < 1 || position > 20) { message.textContent = 'Revisá el número y la posición.'; return; } const list = games(); list.push({id:crypto.randomUUID(),date:document.querySelector('#game-date').value,draw:document.querySelector('#game-draw').value,number,position,createdAt:new Date().toISOString()}); localStorage.setItem(key, JSON.stringify(list)); e.target.reset(); document.querySelector('#game-date').value = data?.today?.date || ''; message.textContent = 'La jugada quedó guardada.'; showGames(); });
 document.querySelector('#clear-games').addEventListener('click', () => { if (confirm('¿Querés borrar todas las jugadas guardadas en este teléfono?')) { localStorage.removeItem(key); message.textContent = 'Se borraron las jugadas guardadas.'; showGames(); } });
 load(); setInterval(load, 300000);
+
+// === Escenas por sorteo: agrega a cada tarjeta una clase según su nombre (draw-previa, draw-nocturna, etc.) ===
+const paintDraws = () => results.querySelectorAll('.draw').forEach(card => {
+  const name = card.querySelector('h2').textContent.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/^la /, '').trim();
+  card.classList.add(`draw-${name}`);
+});
+const baseShowResults = showResults;
+showResults = () => { baseShowResults(); paintDraws(); };
