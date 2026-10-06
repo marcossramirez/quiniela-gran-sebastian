@@ -1,6 +1,31 @@
 {
-  "updatedAt": "2026-10-06T01:45:13.957Z",
+  "updatedAt": "2026-10-06T08:11:44.501Z",
   "today": {
+    "date": "2026-10-06",
+    "draws": [
+      {
+        "name": "La Previa",
+        "numbers": []
+      },
+      {
+        "name": "La Primera",
+        "numbers": []
+      },
+      {
+        "name": "Matutina",
+        "numbers": []
+      },
+      {
+        "name": "Vespertina",
+        "numbers": []
+      },
+      {
+        "name": "Nocturna",
+        "numbers": []
+      }
+    ]
+  },
+  "yesterday": {
     "date": "2026-10-05",
     "draws": [
       {
@@ -127,31 +152,6 @@
           "9546",
           "4790"
         ]
-      }
-    ]
-  },
-  "yesterday": {
-    "date": "2026-10-04",
-    "draws": [
-      {
-        "name": "La Previa",
-        "numbers": []
-      },
-      {
-        "name": "La Primera",
-        "numbers": []
-      },
-      {
-        "name": "Matutina",
-        "numbers": []
-      },
-      {
-        "name": "Vespertina",
-        "numbers": []
-      },
-      {
-        "name": "Nocturna",
-        "numbers": []
       }
     ]
   }
