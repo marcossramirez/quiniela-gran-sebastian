@@ -36,9 +36,29 @@ async function availableDraws() {
   return draws;
 }
 
-async function cityNumbers(id) {
+const lotteries = [
+  ['ciudad', 'Ciudad', /CIUDAD DE BS/],
+  ['provincia', 'Provincia', /^PROVINCIA DE BS/],
+  ['cordoba', 'Córdoba', /CORDOBA/],
+  ['santafe', 'Santa Fe', /SANTA FE/],
+  ['entrerios', 'Entre Ríos', /ENTRE RIOS/],
+  ['montevideo', 'Montevideo', /MONTEVIDEO/]
+];
+const plain = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
+
+function readNumbers(list) {
+  const byPosition = new Map();
+  for (const item of list ?? []) {
+    const position = Number(item.pos);
+    const value = String(item.val).trim();
+    if (position >= 1 && position <= 20 && /^\d{4}$/.test(value)) byPosition.set(position, value);
+  }
+  return byPosition.size === 20 ? Array.from({ length: 20 }, (_, index) => byPosition.get(index + 1)) : null;
+}
+
+async function drawNumbers(id) {
   const raw = await getHtml(`${site}includes/resultados-data.php?sorteo=${id}`);
-  // La respuesta es JavaScript ("window.RESULTADOS_DATA = [...]"), así que se recorta el JSON de adentro.
+  // La respuesta es JavaScript ("window.RESULTADOS_DATA = [...];"), así que se recorta el JSON de adentro.
   const start = raw.search(/[[{]/);
   const end = Math.max(raw.lastIndexOf(']'), raw.lastIndexOf('}'));
   let data;
@@ -52,24 +72,23 @@ async function cityNumbers(id) {
   if (!entry) throw new Error(`La respuesta no incluye el sorteo ${id} (trae: ${entries.map(item => item?.sorteo).join(', ') || 'nada'})`);
 
   const jurisdictions = Object.values(entry.jurisdicciones ?? {});
-  const city = jurisdictions.find(item => /CIUDAD DE BS/i.test(item?.nombre ?? '')) ?? jurisdictions.find(item => /CIUDAD/i.test(item?.nombre ?? ''));
-  if (!city) throw new Error(`No hay jurisdicción CIUDAD en el sorteo ${id} (hay: ${jurisdictions.map(item => item?.nombre).join(', ') || 'ninguna'})`);
-
-  const byPosition = new Map();
-  for (const item of city.numeros ?? []) {
-    const position = Number(item.pos);
-    const value = String(item.val).trim();
-    if (position >= 1 && position <= 20 && /^\d{4}$/.test(value)) byPosition.set(position, value);
+  const found = {};
+  for (const [key, label, pattern] of lotteries) {
+    const jurisdiction = jurisdictions.find(item => pattern.test(plain(item?.nombre)));
+    const numbers = jurisdiction ? readNumbers(jurisdiction.numeros) : null;
+    if (!numbers) {
+      if (key === 'ciudad') throw new Error(`El sorteo ${id} no trae los 20 números de Ciudad (hay: ${jurisdictions.map(item => item?.nombre).join(', ') || 'ninguna jurisdicción'})`);
+      console.warn(`${label}: sin números válidos en el sorteo ${id}`);
+    }
+    found[key] = numbers ?? [];
   }
-  if (byPosition.size !== 20) throw new Error(`El sorteo ${id} no contiene los 20 números de Ciudad (encontré ${byPosition.size})`);
-  const numbers = Array.from({ length: 20 }, (_, index) => byPosition.get(index + 1));
 
-  // Control cruzado: si el mismo JSON trae la lista "Tradicional", tiene que coincidir.
-  const traditional = city.juegos?.Tradicional;
-  if (Array.isArray(traditional) && traditional.length >= 20 && !numbers.every((value, index) => String(traditional[index]) === value)) {
-    throw new Error(`Los números del sorteo ${id} no coinciden con la lista "Tradicional" del mismo JSON`);
+  // Control cruzado: la lista "Tradicional" del mismo sorteo es la de Ciudad y tiene que coincidir.
+  const traditional = entry.numeros_juegos?.Tradicional;
+  if (Array.isArray(traditional) && traditional.length >= 20 && !found.ciudad.every((value, index) => String(traditional[index]) === value)) {
+    throw new Error(`Los números de Ciudad del sorteo ${id} no coinciden con la lista "Tradicional" del mismo JSON`);
   }
-  return numbers;
+  return found;
 }
 
 function dateFor(offset) {
@@ -81,23 +100,26 @@ function dateFor(offset) {
 
 async function buildDay(draws, offset) {
   const target = dateFor(offset);
-  const results = [];
+  const others = lotteries.slice(1).map(([key]) => key);
+  const day = { date: target.iso, draws: [], loterias: Object.fromEntries(others.map(key => [key, []])) };
   for (const [officialName, displayName] of modes) {
     const match = draws.find(draw => draw.label.includes(target.label) && draw.label.includes(officialName));
-    let numbers = [];
+    let found = {};
     if (match) {
       try {
-        numbers = await cityNumbers(match.id);
-        console.log(`${target.label} ${displayName}: sorteo ${match.id}, ${numbers.length} números`);
+        found = await drawNumbers(match.id);
+        const withNumbers = Object.values(found).filter(numbers => numbers.length).length;
+        console.log(`${target.label} ${displayName}: sorteo ${match.id}, ${withNumbers} de ${lotteries.length} loterías con números`);
       } catch (error) {
         console.warn(`${target.label} ${displayName}: ERROR ${error.message}`);
       }
     } else {
       console.log(`${target.label} ${displayName}: todavía no publicado en la fuente`);
     }
-    results.push({ name: displayName, numbers });
+    day.draws.push({ name: displayName, numbers: found.ciudad ?? [] });
+    for (const key of others) day.loterias[key].push({ name: displayName, numbers: found[key] ?? [] });
   }
-  return { date: target.iso, draws: results };
+  return day;
 }
 
 const draws = await availableDraws();
@@ -108,13 +130,17 @@ const archive = JSON.parse(await readFile(archiveUrl, 'utf8'));
 // Si un sorteo viene vacío pero ya teníamos sus números guardados (misma fecha), se conservan.
 function keepOld(day) {
   const old = [previous.today, previous.yesterday, archive[day.date]].filter(item => item?.date === day.date);
-  for (const draw of day.draws) {
-    if (draw.numbers.length) continue;
-    for (const item of old) {
-      const prev = item.draws?.find(d => d.name === draw.name);
-      if (prev?.numbers?.length) { draw.numbers = prev.numbers; break; }
+  const restore = (list, pick) => {
+    for (const draw of list) {
+      if (draw.numbers.length) continue;
+      for (const item of old) {
+        const before = pick(item)?.find(d => d.name === draw.name);
+        if (before?.numbers?.length) { draw.numbers = before.numbers; break; }
+      }
     }
-  }
+  };
+  restore(day.draws, item => item.draws);
+  for (const key of Object.keys(day.loterias)) restore(day.loterias[key], item => item.loterias?.[key]);
   return day;
 }
 
@@ -125,6 +151,7 @@ const output = {
 };
 
 await writeFile(new URL('../data/results.json', import.meta.url), `${JSON.stringify(output, null, 2)}\n`);
-for (const item of [output.today, output.yesterday]) if (item.draws.some(draw => draw.numbers.length)) archive[item.date] = item;
+// El archivo histórico guarda solo Ciudad (es lo que usa MIS JUGADAS) para que no crezca de más.
+for (const item of [output.today, output.yesterday]) if (item.draws.some(draw => draw.numbers.length)) archive[item.date] = { date: item.date, draws: item.draws };
 await writeFile(archiveUrl, `${JSON.stringify(archive, null, 2)}\n`);
 console.log('Listo: results.json y archive.json actualizados');
