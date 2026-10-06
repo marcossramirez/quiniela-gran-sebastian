@@ -70,3 +70,45 @@ h1 { margin: 8px 0 4px; font-size: clamp(2.4rem, 9vw, 3.4rem); line-height: 1.05
 .lottery-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 14px; }
 .lottery-button { border: 2px solid #17140e; border-radius: 999px; background: #fff6d7; color: #17140e; padding: 11px 4px; font: inherit; font-size: .95rem; font-weight: 800; cursor: pointer; }
 .lottery-button.active { background: #11335c; border-color: #11335c; color: #fff; }
+
+
+/* === Banner del sorteo arriba + resultados abajo (más ancho para los números) === */
+@media (max-width: 559px) {
+  .app { padding-left: 10px; padding-right: 10px; }
+}
+
+.draw { padding: 0; }
+
+.draw h2 {
+  margin: 0;
+  height: clamp(96px, 28vw, 150px);
+  padding: 0 14px 10px;
+  display: flex;
+  align-items: flex-end;
+  font-size: clamp(1.6rem, 6.5vw, 2.2rem);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.draw .result-box { background: transparent; box-shadow: none; border-radius: 0; padding: 10px 8px 12px; }
+.draw .pending { margin: 10px; }
+
+/* Color de fondo de cada tarjeta (debajo del banner) */
+.draw-previa     { background: #f6c98b; }
+.draw-primera    { background: #8fcdf0; }
+.draw-matutina   { background: #f2bb28; }
+.draw-vespertina { background: #f08a5d; }
+.draw-nocturna   { background: #5468b4; }
+
+/* Escena de cada sorteo como banner */
+.draw-previa h2     { background-image: linear-gradient(0deg, #0000008c, #0000 65%), url('escena-previa.svg');     background-position: center 40%; }
+.draw-primera h2    { background-image: linear-gradient(0deg, #0000008c, #0000 65%), url('escena-primera.svg');    background-position: center 45%; }
+.draw-matutina h2   { background-image: linear-gradient(0deg, #0000008c, #0000 65%), url('escena-matutina.svg');   background-position: center 40%; }
+.draw-vespertina h2 { background-image: linear-gradient(0deg, #0000008c, #0000 65%), url('escena-vespertina.svg'); background-position: center 55%; }
+.draw-nocturna h2   { background-image: linear-gradient(0deg, #0000008c, #0000 65%), url('escena-nocturna.svg');   background-position: center 30%; }
+
+/* Números más grandes (se agrandan hasta donde entran en las 4 columnas) */
+.numbers { gap: clamp(4px, 1.4cqw, 9px); }
+.numbers li { gap: clamp(2px, 1cqw, 8px); padding: 2px clamp(3px, 1.2cqw, 10px) 2px 3px; font-size: clamp(.8rem, 5.6cqw, 1.5rem); }
+.position { width: clamp(18px, 4.5cqw, 30px); height: clamp(18px, 4.5cqw, 30px); font-size: clamp(.5rem, 2.2cqw, .72rem); }
+.number { letter-spacing: .02em; }
