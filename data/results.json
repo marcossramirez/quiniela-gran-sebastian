@@ -1,6 +1,143 @@
 {
-  "updatedAt": "2026-10-13T02:44:29.465Z",
+  "updatedAt": "2026-10-13T10:25:51.672Z",
   "today": {
+    "date": "2026-10-13",
+    "draws": [
+      {
+        "name": "La Previa",
+        "numbers": []
+      },
+      {
+        "name": "La Primera",
+        "numbers": []
+      },
+      {
+        "name": "Matutina",
+        "numbers": []
+      },
+      {
+        "name": "Vespertina",
+        "numbers": []
+      },
+      {
+        "name": "Nocturna",
+        "numbers": []
+      }
+    ],
+    "loterias": {
+      "provincia": [
+        {
+          "name": "La Previa",
+          "numbers": []
+        },
+        {
+          "name": "La Primera",
+          "numbers": []
+        },
+        {
+          "name": "Matutina",
+          "numbers": []
+        },
+        {
+          "name": "Vespertina",
+          "numbers": []
+        },
+        {
+          "name": "Nocturna",
+          "numbers": []
+        }
+      ],
+      "cordoba": [
+        {
+          "name": "La Previa",
+          "numbers": []
+        },
+        {
+          "name": "La Primera",
+          "numbers": []
+        },
+        {
+          "name": "Matutina",
+          "numbers": []
+        },
+        {
+          "name": "Vespertina",
+          "numbers": []
+        },
+        {
+          "name": "Nocturna",
+          "numbers": []
+        }
+      ],
+      "santafe": [
+        {
+          "name": "La Previa",
+          "numbers": []
+        },
+        {
+          "name": "La Primera",
+          "numbers": []
+        },
+        {
+          "name": "Matutina",
+          "numbers": []
+        },
+        {
+          "name": "Vespertina",
+          "numbers": []
+        },
+        {
+          "name": "Nocturna",
+          "numbers": []
+        }
+      ],
+      "entrerios": [
+        {
+          "name": "La Previa",
+          "numbers": []
+        },
+        {
+          "name": "La Primera",
+          "numbers": []
+        },
+        {
+          "name": "Matutina",
+          "numbers": []
+        },
+        {
+          "name": "Vespertina",
+          "numbers": []
+        },
+        {
+          "name": "Nocturna",
+          "numbers": []
+        }
+      ],
+      "montevideo": [
+        {
+          "name": "La Previa",
+          "numbers": []
+        },
+        {
+          "name": "La Primera",
+          "numbers": []
+        },
+        {
+          "name": "Matutina",
+          "numbers": []
+        },
+        {
+          "name": "Vespertina",
+          "numbers": []
+        },
+        {
+          "name": "Nocturna",
+          "numbers": []
+        }
+      ]
+    }
+  },
+  "yesterday": {
     "date": "2026-10-12",
     "draws": [
       {
@@ -700,143 +837,6 @@
             "0310",
             "5128"
           ]
-        }
-      ]
-    }
-  },
-  "yesterday": {
-    "date": "2026-10-11",
-    "draws": [
-      {
-        "name": "La Previa",
-        "numbers": []
-      },
-      {
-        "name": "La Primera",
-        "numbers": []
-      },
-      {
-        "name": "Matutina",
-        "numbers": []
-      },
-      {
-        "name": "Vespertina",
-        "numbers": []
-      },
-      {
-        "name": "Nocturna",
-        "numbers": []
-      }
-    ],
-    "loterias": {
-      "provincia": [
-        {
-          "name": "La Previa",
-          "numbers": []
-        },
-        {
-          "name": "La Primera",
-          "numbers": []
-        },
-        {
-          "name": "Matutina",
-          "numbers": []
-        },
-        {
-          "name": "Vespertina",
-          "numbers": []
-        },
-        {
-          "name": "Nocturna",
-          "numbers": []
-        }
-      ],
-      "cordoba": [
-        {
-          "name": "La Previa",
-          "numbers": []
-        },
-        {
-          "name": "La Primera",
-          "numbers": []
-        },
-        {
-          "name": "Matutina",
-          "numbers": []
-        },
-        {
-          "name": "Vespertina",
-          "numbers": []
-        },
-        {
-          "name": "Nocturna",
-          "numbers": []
-        }
-      ],
-      "santafe": [
-        {
-          "name": "La Previa",
-          "numbers": []
-        },
-        {
-          "name": "La Primera",
-          "numbers": []
-        },
-        {
-          "name": "Matutina",
-          "numbers": []
-        },
-        {
-          "name": "Vespertina",
-          "numbers": []
-        },
-        {
-          "name": "Nocturna",
-          "numbers": []
-        }
-      ],
-      "entrerios": [
-        {
-          "name": "La Previa",
-          "numbers": []
-        },
-        {
-          "name": "La Primera",
-          "numbers": []
-        },
-        {
-          "name": "Matutina",
-          "numbers": []
-        },
-        {
-          "name": "Vespertina",
-          "numbers": []
-        },
-        {
-          "name": "Nocturna",
-          "numbers": []
-        }
-      ],
-      "montevideo": [
-        {
-          "name": "La Previa",
-          "numbers": []
-        },
-        {
-          "name": "La Primera",
-          "numbers": []
-        },
-        {
-          "name": "Matutina",
-          "numbers": []
-        },
-        {
-          "name": "Vespertina",
-          "numbers": []
-        },
-        {
-          "name": "Nocturna",
-          "numbers": []
         }
       ]
     }
